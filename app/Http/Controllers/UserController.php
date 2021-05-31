@@ -65,7 +65,12 @@ class UserController extends Controller {
      */
     public function show($id)
     {
-        // $user = User::findOrFail($id);
+
+        $user = User::findOrFail($id);
+        return $this->successResponse($user);
+
+        // old code
+        /*
         $user = User::where('userid', $id)->first();
         if($user){
             return $this->successResponse($user);
@@ -73,6 +78,7 @@ class UserController extends Controller {
         {
             return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
         }
+        */
     }
 
     /**
@@ -87,6 +93,21 @@ class UserController extends Controller {
             'gender' => 'in:Male,Female',
         ];
 
+        $this->validate($request, $rules);
+        $user = User::findOrFail($id);
+
+        $user->fill ($request->all());
+
+        // if no change happpen
+        if ($user->isClean()) {
+            return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $user->save();
+        return $this->successResponse($user);
+
+        // old code
+        /*
         $this->validate($request, $rules);
 
         // $user = User::findOrFail($id);
@@ -105,6 +126,7 @@ class UserController extends Controller {
             {
                 return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
         }   
+        */
     }
     /**
      * Remove an existing user
@@ -112,7 +134,12 @@ class UserController extends Controller {
      */
     public function delete($id)
     {
-        //$user = User::findOrFail($id);
+        $user = User::findOrFail($id);
+        $user->delete();
+        return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
+
+        // old code
+        /*
         $user = User::where('userid', $id)->first();
         if ($user){
             $user->delete();
@@ -121,6 +148,7 @@ class UserController extends Controller {
         {
             return $this->errorResponse('UserID Does not Exists', Response::HTTP_NOT_FOUND);
         }
+        */
     }
 }
 
