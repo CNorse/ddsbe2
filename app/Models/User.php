@@ -9,13 +9,16 @@
     protected $table = 'tbluser';
     // column sa table
     protected $fillable = [
-        'username', 'password', 'gender'
+        'username', 'password', 'gender', 'userid', 'jobid',
     ];
 
     public $timestamps = false;
     protected $primaryKey = 'userid';
 
-    protected $hidden = [
+     protected $hidden = [
         'password',
     ];
+    
  }
+
+ 
